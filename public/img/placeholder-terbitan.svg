@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 800" width="600" height="800" role="img"
+     aria-label="Sampul belum tersedia">
+  <rect width="600" height="800" fill="#0E2B24"/>
+  <path d="M0 800V620l140-110 110 90 150-150 200 170v180z" fill="#14453A"/>
+  <rect x="60" y="80" width="120" height="8" fill="#FE5000"/>
+  <text x="60" y="150" font-family="system-ui,sans-serif" font-size="30" font-weight="700" fill="#F5F8F7">
+    Sampul
+  </text>
+  <text x="60" y="190" font-family="system-ui,sans-serif" font-size="30" font-weight="700" fill="#8FA3A0">
+    belum diunggah
+  </text>
+</svg>

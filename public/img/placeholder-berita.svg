@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="1200" height="800" role="img"
+     aria-label="Gambar belum tersedia">
+  <defs>
+    <pattern id="anyam" width="16" height="16" patternUnits="userSpaceOnUse">
+      <path d="M0 0l16 16M16 0L0 16" stroke="#B9C4C1" stroke-width="2" fill="none"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="800" fill="#E9EDEB"/>
+  <rect width="1200" height="800" fill="url(#anyam)" opacity=".5"/>
+  <path d="M0 800V560l260-190 200 150 280-260 240 230 220-120v430z" fill="#D5DCD9"/>
+  <text x="600" y="700" text-anchor="middle" font-family="system-ui,sans-serif"
+        font-size="34" font-weight="600" fill="#8FA3A0" letter-spacing="4">
+    GAMBAR BELUM DIUNGGAH
+  </text>
+</svg>

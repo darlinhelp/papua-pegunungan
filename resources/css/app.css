@@ -1,0 +1,283 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    html {
+        scroll-behavior: smooth;
+        -webkit-text-size-adjust: 100%;
+    }
+
+    body {
+        @apply bg-white text-arang font-sans antialiased;
+    }
+
+    :where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+        @apply outline-none ring-2 ring-jingga ring-offset-2 ring-offset-white rounded-sm;
+    }
+
+    .bg-arang-900 :where(a, button):focus-visible,
+    .bg-arang-950 :where(a, button):focus-visible {
+        @apply ring-offset-arang-900;
+    }
+
+    [x-cloak] {
+        display: none !important;
+    }
+
+    ::selection {
+        @apply bg-jingga text-white;
+    }
+}
+
+@layer components {
+    .shell {
+        @apply mx-auto w-full max-w-shell px-5 sm:px-8;
+    }
+
+    /* ——— Bilah kepala ———
+       Tinggi dan lebarnya dari variabel CSS yang dicetak di <head>.
+       Atribut data-kecil dipasang Alpine saat halaman digulir, jadi
+       penyusutannya diatur di sini, bukan lewat kelas Tailwind. */
+    .kop-dalam {
+        @apply mx-auto w-full px-5 sm:px-8 flex items-center gap-6;
+        max-width: var(--kop-lebar, 1264px);
+        height: var(--kop-tinggi, 80px);
+        transition: height .3s ease;
+    }
+
+    .kop-dalam[data-kecil="true"] {
+        height: var(--kop-tinggi-kecil, 64px);
+    }
+
+    .logo-kop {
+        height: var(--logo-tinggi, 44px);
+        width: auto;
+        transition: height .3s ease;
+    }
+
+    .logo-kop[data-kecil="true"] {
+        height: var(--logo-tinggi-kecil, 36px);
+    }
+
+    .label {
+        @apply text-2xs font-bold uppercase tracking-label;
+    }
+
+    /* ——— Ukuran judul, terpisah untuk beranda dan artikel ———
+       clamp() menjaga tampilan responsif tetap jalan; var(--skala-judul-...)
+       yang membesarkan/mengecilkannya dari pengaturan panel admin, di atas
+       ukuran responsif itu. Ditulis sebagai CSS biasa, bukan kelas Tailwind
+       biasa, karena butuh calc() dengan variabel yang nilainya diatur admin. */
+    .judul-beranda {
+        font-size: calc(clamp(1.25rem, 1rem + 1.1vw, 1.75rem) * var(--skala-judul-beranda, 1));
+        font-weight: 800;
+        letter-spacing: -0.02em;
+        line-height: 1.15;
+    }
+
+    .judul-artikel {
+        font-size: calc(clamp(1.75rem, 1.1rem + 3vw, 2.75rem) * var(--skala-judul-artikel, 1));
+        font-weight: 800;
+        letter-spacing: -0.02em;
+        line-height: 1.1;
+    }
+
+    /* ——— Kelengkungan sudut ———
+       Nilainya dari variabel --sudut yang dicetak di <head>, diatur lewat
+       panel admin. Ditulis sebagai CSS biasa karena nilainya tidak tetap
+       dan tidak akan terbaca pemindai Tailwind saat build. */
+    .bingkai {
+        border-radius: var(--sudut, 0px);
+        overflow: hidden;
+    }
+
+    .kartu {
+        @apply bg-white border border-abu-200 transition duration-200;
+        border-radius: var(--sudut, 0px);
+        overflow: hidden;
+    }
+
+    .kartu:hover {
+        @apply border-abu-300 shadow-kartu;
+    }
+
+    /* Judul berita: berubah oranye saat disentuh, pola umum portal berita. */
+    /* ——— Gaya tautan judul saat disentuh ———
+       Tiga pilihan, diatur dari Pengaturan → Layout, diterapkan lewat kelas
+       di tag <body> (gaya-tautan-warna / -garis / -garis-tengah). Ditulis
+       sebagai CSS biasa karena animasinya butuh background-size dan
+       transition yang tidak tersedia sebagai utility Tailwind bawaan. */
+    .tautan-judul {
+        transition: color 0.2s;
+    }
+
+    body.gaya-tautan-warna .group:hover .tautan-judul,
+    body.gaya-tautan-warna .tautan-judul:hover {
+        @apply text-jingga;
+    }
+
+    body.gaya-tautan-garis .tautan-judul {
+        background-image: linear-gradient(currentColor, currentColor);
+        background-size: 0% 1px;
+        background-position: 0 100%;
+        background-repeat: no-repeat;
+        transition: background-size 0.35s cubic-bezier(0.2, 0.7, 0.3, 1), color 0.2s;
+    }
+
+    body.gaya-tautan-garis .group:hover .tautan-judul,
+    body.gaya-tautan-garis .tautan-judul:hover {
+        background-size: 100% 1px;
+        @apply text-jingga;
+    }
+
+    body.gaya-tautan-garis-tengah .tautan-judul {
+        background-image: linear-gradient(currentColor, currentColor);
+        background-size: 0% 1px;
+        background-position: 50% 100%;
+        background-repeat: no-repeat;
+        transition: background-size 0.35s cubic-bezier(0.2, 0.7, 0.3, 1), color 0.2s;
+    }
+
+    body.gaya-tautan-garis-tengah .group:hover .tautan-judul,
+    body.gaya-tautan-garis-tengah .tautan-judul:hover {
+        background-size: 100% 1px;
+        @apply text-jingga;
+    }
+
+    /* Garis oranye pendek di atas judul seksi. */
+    .garis-seksi {
+        @apply block h-1 w-10 bg-jingga mb-3;
+    }
+
+    /* ——— Badan artikel ——— */
+    .artikel {
+        @apply text-[1.0625rem] leading-[1.8] text-arang/85;
+    }
+
+    .artikel > * + * {
+        @apply mt-5;
+    }
+
+    .artikel h2 {
+        @apply text-2xl font-bold leading-tight text-arang mt-10 mb-3;
+    }
+
+    .artikel h3 {
+        @apply text-xl font-bold leading-tight text-arang mt-8 mb-2;
+    }
+
+    .artikel a {
+        @apply text-jingga-700 underline underline-offset-2 decoration-jingga/40 hover:decoration-jingga;
+    }
+
+    .artikel ul {
+        @apply list-disc pl-6 space-y-2;
+    }
+
+    .artikel ol {
+        @apply list-decimal pl-6 space-y-2;
+    }
+
+    .artikel blockquote {
+        @apply border-l-4 border-jingga pl-5 italic text-arang/75;
+    }
+
+    .artikel img {
+        @apply w-full;
+        border-radius: var(--sudut, 0px);
+    }
+
+    .artikel figcaption {
+        @apply text-sm text-abu-500 mt-2;
+    }
+
+    /* ——— Lembar buku di halaman baca publikasi ——— */
+    .lembar-buku {
+        background: #fff;
+        overflow: hidden;
+    }
+
+    .lembar-buku img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
+
+    /* ——— Blok gambar dari rich editor ———
+       Kelasnya dibuat di PHP (GambarBlock/GaleriBlock), jadi ditulis sebagai
+       CSS biasa — utility Tailwind tidak akan terdeteksi pemindai saat build. */
+    .blok-gambar {
+        @apply my-8;
+    }
+
+    .blok-gambar img {
+        @apply w-full h-auto;
+        border-radius: var(--sudut, 0px);
+    }
+
+    .blok-gambar figcaption {
+        @apply text-sm leading-relaxed text-abu-500 mt-3 border-l-4 border-jingga pl-3;
+    }
+
+    .blok-sumber {
+        @apply text-abu-400;
+    }
+
+    @screen lg {
+        .blok-gambar--lebar {
+            width: calc(100% + 8rem);
+            margin-left: -4rem;
+        }
+    }
+
+    .blok-galeri {
+        @apply my-8 grid gap-3;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .blok-galeri figure {
+        @apply m-0;
+    }
+
+    .blok-galeri img {
+        @apply w-full object-cover;
+        aspect-ratio: 4 / 3;
+        border-radius: var(--sudut, 0px);
+    }
+
+    .blok-galeri figcaption {
+        @apply text-xs leading-snug text-abu-500 mt-2;
+    }
+
+    @screen sm {
+        .blok-galeri[data-kolom="3"] {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+
+        .blok-galeri[data-kolom="4"] {
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+        }
+    }
+}
+
+@layer utilities {
+    .seimbang {
+        text-wrap: balance;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}

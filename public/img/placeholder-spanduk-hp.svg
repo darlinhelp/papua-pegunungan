@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600" role="img"
+     aria-label="Spanduk contoh versi ponsel">
+  <defs>
+    <linearGradient id="g2" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0E2B24"/><stop offset="1" stop-color="#14453A"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="600" fill="url(#g2)"/>
+  <path d="M0 600V430l130-90 110 70 150-120 140 130 120-80 150 110v150z" fill="#071613" opacity=".55"/>
+  <rect x="60" y="150" width="80" height="7" fill="#FE5000"/>
+  <text x="60" y="222" font-family="system-ui,sans-serif" font-size="42" font-weight="800" fill="#fff">Versi ponsel</text>
+  <text x="60" y="266" font-family="system-ui,sans-serif" font-size="20" fill="#B9C4C1">800 &#215; 600</text>
+</svg>

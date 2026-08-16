@@ -1,0 +1,100 @@
+<IfModule mod_rewrite.c>
+    <IfModule mod_negotiation.c>
+        Options -MultiViews -Indexes
+    </IfModule>
+
+    RewriteEngine On
+
+    # Menangani permintaan Authorization
+    RewriteCond %{HTTP:Authorization} .
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+    # Buang garis miring di akhir alamat
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_URI} (.+)/$
+    RewriteRule ^ %1 [L,R=301]
+
+    # Arahkan ke front controller
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^ index.php [L]
+</IfModule>
+
+# ══════════════════════════════════════════════════════════════════
+#  Kompresi
+#  HTML, CSS, dan JS dikirim dalam bentuk terkompresi. Untuk berkas
+#  teks, ini biasanya memangkas ukuran 60–80 persen.
+# ══════════════════════════════════════════════════════════════════
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css
+    AddOutputFilterByType DEFLATE application/javascript application/x-javascript
+    AddOutputFilterByType DEFLATE application/json application/xml
+    AddOutputFilterByType DEFLATE image/svg+xml application/rss+xml
+</IfModule>
+
+# Kalau server mendukung Brotli, hasilnya lebih kecil lagi dari gzip.
+<IfModule mod_brotli.c>
+    AddOutputFilterByType BROTLI_COMPRESS text/html text/css
+    AddOutputFilterByType BROTLI_COMPRESS application/javascript application/json
+    AddOutputFilterByType BROTLI_COMPRESS image/svg+xml
+</IfModule>
+
+# ══════════════════════════════════════════════════════════════════
+#  Masa simpan di browser
+#  Berkas di /build bernama ber-hash — isinya berubah, namanya ikut
+#  berubah. Karena itu aman disimpan setahun: pengunjung yang kembali
+#  tidak mengunduh ulang apa pun, tapi tetap dapat versi terbaru
+#  begitu situs diperbarui.
+# ══════════════════════════════════════════════════════════════════
+<IfModule mod_expires.c>
+    ExpiresActive On
+
+    ExpiresByType text/css                  "access plus 1 year"
+    ExpiresByType application/javascript    "access plus 1 year"
+    ExpiresByType text/javascript           "access plus 1 year"
+
+    ExpiresByType image/jpeg                "access plus 6 months"
+    ExpiresByType image/png                 "access plus 6 months"
+    ExpiresByType image/webp                "access plus 6 months"
+    ExpiresByType image/avif                "access plus 6 months"
+    ExpiresByType image/svg+xml             "access plus 6 months"
+    ExpiresByType image/x-icon              "access plus 1 year"
+
+    ExpiresByType font/woff2                "access plus 1 year"
+    ExpiresByType application/pdf           "access plus 1 month"
+
+    # Halaman tidak disimpan lama — berita harus selalu segar.
+    ExpiresByType text/html                 "access plus 0 seconds"
+</IfModule>
+
+<IfModule mod_headers.c>
+    # Berkas ber-hash: tandai sebagai tidak akan pernah berubah.
+    <FilesMatch "\.(css|js)$">
+        Header set Cache-Control "public, max-age=31536000, immutable"
+    </FilesMatch>
+
+    # Gambar dan berkas yang diunggah pengurus bisa diganti, jadi lebih pendek.
+    <FilesMatch "\.(jpg|jpeg|png|webp|avif|svg|pdf)$">
+        Header set Cache-Control "public, max-age=2592000"
+    </FilesMatch>
+
+    # Beberapa pengaman dasar
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+
+    # Jangan bocorkan versi PHP lewat header
+    Header always unset X-Powered-By
+
+    # PDF publikasi ditampilkan sebaris di halaman baca, bukan dipaksa terunduh.
+    # Tanpa ini sebagian server mengirim Content-Disposition: attachment,
+    # sehingga penampil di dalam halaman muncul kosong.
+    <FilesMatch "\.pdf$">
+        Header set Content-Disposition "inline"
+    </FilesMatch>
+</IfModule>
+
+# Jangan pernah sajikan berkas .env, log, atau berkas sistem
+<FilesMatch "^\.|composer\.(json|lock)$|package(-lock)?\.json$">
+    Require all denied
+</FilesMatch>
